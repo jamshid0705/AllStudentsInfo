@@ -1,6 +1,6 @@
 const catchError=require('../utility/catchError')
 
-const getAll=catchError(async (req,res,Model)=>{
+const getAll=catchError(async (req,res,next,Model)=>{
   const datas=await Model.find()
 
   res.status(200).json({
@@ -12,7 +12,7 @@ const getAll=catchError(async (req,res,Model)=>{
 
 ///// get one
 
-const getOne=catchError(async(req,res,Model)=>{
+const getOne=catchError(async(req,res,next,Model)=>{
   const data=await Model.findById(req.params.id)
 
   if(!data){
@@ -28,7 +28,7 @@ const getOne=catchError(async(req,res,Model)=>{
 /// create
 
 
-const add=catchError(async(req,res,Model)=>{
+const add=catchError(async(req,res,next,Model)=>{
   const data=await Model.create(req.body)
 
   res.status(200).json({
@@ -39,7 +39,7 @@ const add=catchError(async(req,res,Model)=>{
 
 ////// update
 
-const update=catchError(async(req,res,Model)=>{
+const update=catchError(async(req,res,next,Model)=>{
   const data=await Model.findByIdAndUpdate(req.params.id)
   
   if(!data){
@@ -52,7 +52,7 @@ const update=catchError(async(req,res,Model)=>{
 })
 
 //// delete
-const deleteData=catchError(async(req,res,Model)=>{
+const deleteData=catchError(async(req,res,next,Model)=>{
   const data=await Model.findByIdAndDelete(req.params.id)
 
   if(!data){

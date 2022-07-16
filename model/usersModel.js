@@ -1,4 +1,5 @@
 const validator=require('validator')
+const bcrypt=require('bcrypt')
 
 const mongoose=require('mongoose')
 
@@ -20,7 +21,9 @@ const userSchema=new mongoose.Schema({
   password:{
     type:String,
     required:true,
-    validate:[validator.isStrongPassword,'Siz kuchliroq password kiriting !']
+    validate:{validator:function(val){
+      return validator.isStrongPassword(val)
+    },message:"Siz kuchliroq parol kiriting !"}
   },
   passwordConfirm:{
     type:String,
@@ -29,6 +32,18 @@ const userSchema=new mongoose.Schema({
       return val===this.password
     },message:'Siz bir xil password kiriting!'}
   }
+})
+
+userSchema.pre('save',async function(req,res,next){  // parolni hashlash
+  if(!this.isModified('password')){
+    return next()
+  }
+
+  const hash=await bcrypt.hash(this.password,12)
+  
+  this.password=hash,
+  this.passwordConfirm=undefined
+  next()
 })
 
 const User=mongoose.model('users',userSchema)

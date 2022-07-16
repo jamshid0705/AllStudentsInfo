@@ -35,10 +35,23 @@ app.use((err,req,res,next)=>{  // appErrorga kelgan xatolarni bu funksiyaning er
   err.statusCode=err.statusCode || 404,
   err.message=err.message || 'Not found'
 
-  res.status(err.statusCode).json({
-    status:err.status,
-    data:err.message
-  })
+  if(process.env.NODE_ENV=='DEVELOPMENT'){
+    res.status(err.statusCode).json({
+      status:err.status,
+      data:err.message,
+      statusCode:err.statusCode,
+      stack:err.stack  // qaysi joyida xatoligini aytadi
+    })
+  }
+ 
+
+  if(process.env.NODE_ENV=='PRODUCTION'){
+    res.status(err.statusCode).json({
+      status:err.status,
+      data:err.message,
+    })
+  }
+
   next()
 })
 

@@ -3,10 +3,10 @@ const mongoose=require('mongoose')
 const regionSchema=new mongoose.Schema({
   name:{
     type:String,
-    districtId:[{
-      type:mongoose.Schema.ObjectId,
-      ref:'districts'
-    }]
+  },
+  countryId:{
+    type:mongoose.Schema.ObjectId,
+    ref:'countries'
   }
 })
 

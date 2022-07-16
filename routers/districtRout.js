@@ -5,5 +5,7 @@ const Router=express.Router()
 Router.route('/').get(districtController.getAllDistrict).post(districtController.addDistrict)
 Router.route('/:id').delete(districtController.deleteDistrict).get(districtController.getOneDistrict).patch(districtController.updateDistrict)
 
+// Router.route('/country/district')
+
 
 module.exports=Router

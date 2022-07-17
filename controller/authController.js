@@ -2,6 +2,7 @@ const User=require('../model/usersModel')
 const catchError = require('../utility/catchError')
 const jwt=require('jsonwebtoken')
 const appError = require('../utility/appError')
+const mail = require('../utility/mail')
 
 
 
@@ -20,7 +21,7 @@ const signup=catchError(async(req,res,next)=>{
     role:req.body.role,
     password:req.body.password,
     passwordConfirm:req.body.passwordConfirm,
-    passwordChangedData:req.body.passwordChangedData
+    
   })
   
   const token=createToken(user._id)
@@ -90,6 +91,7 @@ const protect=catchError(async(req,res,next)=>{
   }
 
   req.user=user
+  console.log(req.user)
   next()
 })
 
@@ -104,8 +106,41 @@ const role=(roles)=>{
   })
 }
 
-//////////////
+////////////// Forgot password ///////////////
+
+const forgotPassword=catchError(async(req,res,next)=>{
+  // 1 email bor yo'qligini tekshiramiz
+   if(!req.body.email){
+    return next(new appError('Siz email kiritishingiz kerak !',404))
+   }
+  // 2 emaillik user bor yo'qligini tekshiramiz
+  const user=await User.findOne({email:req.body.email})
+  
+  if(!user){
+    return next(new appError('Bunday user mavjud emas !',404))
+  }
+  // 3 token berish. Random orqali token yasaymiz emailga jo'natish uchun. Modulda 
+  const resetToken=user.resetHash()
+  console.log(resetToken)
+
+  await user.save({validateBeforeSave:false})
+
+  // 4 emailga tokenni jo'natish
+  resentLink=`${req.protocol}://${req.headers.host}/api/v1/user/forgotpassword/:${resetToken}`
+  subject='Habar keldi !'
+  html=`<h3><a style="color:red" href="${resentLink}">👉Reset Password</a></h3>`
+  to='jamshidshamshod0705@gmail.com'
+  from="jamshidshamshod0705@gmail.com"
+
+  await mail({from,subject,to,html})
+
+  res.status(200).json({
+    status:"success",
+    data:"Right"
+  })
+  next()
+})
 
 
 
-module.exports={signup,signin,protect,role}
+module.exports={signup,signin,protect,role,forgotPassword}

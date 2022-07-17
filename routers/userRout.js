@@ -9,6 +9,7 @@ Router.route('/:id').delete(authController.protect,authController.role(['admin']
 
 Router.route('/signup').post(authController.signup)
 Router.route('/signin').post(authController.signin)
+Router.route('/forgotpassword').post(authController.protect,authController.forgotPassword)
 
 
 

@@ -2,11 +2,13 @@ const express=require('express')
 
 const Router=express.Router()
 const userController=require('../controller/userController')
+const authController=require('../controller/authController')
 
-Router.route('/').get(userController.getAllUser).post(userController.addUser)
-Router.route('/:id').delete(userController.deleteUser).get(userController.getOneUser).patch(userController.updateUser)
+Router.route('/').get(authController.protect,userController.getAllUser).post(authController.protect,userController.addUser)
+Router.route('/:id').delete(authController.protect,authController.role(['admin']),userController.deleteUser).get(authController.protect,userController.getOneUser).patch(authController.protect,userController.updateUser)
 
-Router.route('/signup').post(userController.signup)
+Router.route('/signup').post(authController.signup)
+Router.route('/signin').post(authController.signin)
 
 
 

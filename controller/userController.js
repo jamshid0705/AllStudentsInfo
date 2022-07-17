@@ -1,37 +1,20 @@
 const User=require('../model/usersModel')
-const catchError = require('../utility/catchError')
-const jwt=require('jsonwebtoken')
+
 
 const {getAll,getOne,add,update,deleteData}= require('./handlerController')
 
 
 
-const getAllUser=(req,res,next)=>{getAll(req,res,next,User)}
+const getAllUser=(req,res)=>{getAll(req,res,User)}
 
-const getOneUser=(req,res,next)=>{getOne(req,res,next,User)}
+const getOneUser=(req,res)=>{getOne(req,res,User)}
 
-const addUser=(req,res,next)=>{add(req,res,next,User)}
+const addUser=(req,res)=>{add(req,res,User)}
 
-const updateUser=(req,res,next)=>{update(req,res,next,User)}
+const updateUser=(req,res)=>{update(req,res,User)}
 
-const deleteUser=(req,res,next)=>{deleteData(req,res,next,User)}
+const deleteUser=(req,res)=>{deleteData(req,res,User)}
 
-/////////// Sign up //////////
 
-const signup=catchError(async(req,res,next)=>{
-  const user=await User.create({
-    name:req.body.name,
-    email:req.body.email,
-    role:req.body.role,
-    password:req.body.password
-  })
 
-  const token=jwt.sign(user._id,process.env.JWT_SECRET,{expiresIn:process.env.JWT_EXPIRES_IN})
-
-  res.status(200).json({
-    status:'success',
-    token:token
-  })
-})
-
-module.exports={getAllUser,getOneUser,addUser,updateUser,deleteUser,signup}
+module.exports={getAllUser,getOneUser,addUser,updateUser,deleteUser}

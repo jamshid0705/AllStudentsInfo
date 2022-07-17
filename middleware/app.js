@@ -21,39 +21,39 @@ app.use('/api/v1/region',regionRout)
 app.use('/api/v1/user',userRout)
 
 
-// app.all('*',function(req,res,next){  // bu error noto'g'ri page ni ushlab qoladi
-//   // const err={
-//   //   statusCode:404,
-//   //   status:'fail',
-//   //   message:'Not page'
-//   // }
-//   next(new appError('Not page',404))
-// })
+app.all('*',function(req,res,next){  // bu error noto'g'ri page ni ushlab qoladi
+  // const err={
+  //   statusCode:404,
+  //   status:'fail',
+  //   message:'Not page'
+  // }
+  next(new appError('Not page',404))
+})
 
-// app.use((err,req,res,next)=>{  // appErrorga kelgan xatolarni bu funksiyaning err elementi ushlab qoladi
-//   err.status=err.status || 'fail',
-//   err.statusCode=err.statusCode || 404,
-//   err.message=err.message || 'Not found'
+app.use((err,req,res,next)=>{  // appErrorga kelgan xatolarni bu funksiyaning err elementi ushlab qoladi
+  err.status=err.status || 'fail',
+  err.statusCode=err.statusCode || 404,
+  err.message=err.message || 'Not found'
 
-//   if(process.env.NODE_ENV=='DEVELOPMENT'){
-//     res.status(err.statusCode).json({
-//       status:err.status,
-//       data:err.message,
-//       statusCode:err.statusCode,
-//       stack:err.stack  // qaysi joyida xatoligini aytadi
-//     })
-//   }
+  if(process.env.NODE_ENV=='DEVELOPMENT'){
+    res.status(err.statusCode).json({
+      status:err.status,
+      data:err.message,
+      statusCode:err.statusCode,
+      stack:err.stack  // qaysi joyida xatoligini aytadi
+    })
+  }
  
 
-//   if(process.env.NODE_ENV=='PRODUCTION'){
-//     res.status(err.statusCode).json({
-//       status:err.status,
-//       data:err.message,
-//     })
-//   }
+  if(process.env.NODE_ENV=='PRODUCTION'){
+    res.status(err.statusCode).json({
+      status:err.status,
+      data:err.message,
+    })
+  }
 
-//   next()
-// })
+  next()
+})
 
 
 module.exports=app

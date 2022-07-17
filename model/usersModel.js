@@ -5,12 +5,12 @@ const mongoose=require('mongoose')
 
 const userSchema=new mongoose.Schema({
   name:{type:String,
-  required:true},
+    required:true},
   email:{
     type:String,
     required:true,
-    unique:[true,'bunday email mavjud !'],
-    validate:[validator.isEmail,'Bunday email mavjud !']
+    unique:[true,'Bunday email mavjud !'],
+    validate:[validator.isEmail,'Email  xato!']
   },
   role:{
     type:String,
@@ -23,7 +23,8 @@ const userSchema=new mongoose.Schema({
     required:true,
     validate:{validator:function(val){
       return validator.isStrongPassword(val)
-    },message:"Siz kuchliroq parol kiriting !"}
+    },message:"Siz kuchliroq parol kiriting !"},
+    select:false
   },
   passwordConfirm:{
     type:String,

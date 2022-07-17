@@ -1,4 +1,4 @@
-// const catchError=require('../utility/catchError')
+const catchError=require('../utility/catchError')
 
 const getAll=async (req,res,Model,options)=>{
   let datas
@@ -21,7 +21,7 @@ const getAll=async (req,res,Model,options)=>{
 
 ///// get one
 
-const getOne=async(req,res,Model)=>{
+const getOne=async(req,res,Model,options)=>{
   let data
   if(options){
     data=await Model.find().populate({
